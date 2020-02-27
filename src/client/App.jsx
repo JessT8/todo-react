@@ -1,17 +1,7 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-class TodoList extends React.Component {
-  render() {
-    var displayList = this.props.values.map(list=> {
-        return <li>{list}</li>
-    });
-    return (
-      <ol>
-        {displayList}
-      </ol>
-    );
-  }
-}
+
+
 
 class App extends React.Component {
   constructor() {
@@ -19,12 +9,27 @@ class App extends React.Component {
     this.state = {
             todo : "",
             todoList: [],
+            errorMsg : ""
         }
   }
+
+    delete(event){
+       let todoList = this.state.todoList;
+       todoList.splice(parseInt(event.target.value), 1);
+       this.setState({todoList: todoList});
+     }
+
   create() {
-    let newTodo = this.state.todoList;
-    newTodo.push(this.state.todo);
-    this.setState({todoList:newTodo, todo:""});
+    let newTodo = this.state.todo;
+    if(newTodo.length > 1 && newTodo.length < 200){
+        let newTodoList = this.state.todoList;
+        newTodoList.push(newTodo);
+        this.setState({todoList:newTodoList, todo:"", errorMsg:""});
+    }else
+    {
+        let errorMsg = "Wrong input! Need to be more than 1 letter and less than 200 letters";
+         this.setState({errorMsg:errorMsg, todo:""});
+    }
   }
 
   changeHandler(event){
@@ -33,9 +38,23 @@ class App extends React.Component {
   }
 
   render() {
+    let displayError;
+    if (this.state.errorMsg != ""){
+        displayError = (<p className="warning">{this.state.errorMsg}</p>);
+    }else{
+        displayError = "";
+    }
+    let counter = -1;
+    var displayList = this.state.todoList.map(list=> {
+        counter ++;
+        return <li>{list}<button onClick={(event)=>{this.delete(event)}} value={counter}>Delete</button></li>
+    });
     return (
       <div>
-        <TodoList values={this.state.todoList} />
+        {displayError}
+        <ol>
+            {displayList}
+        </ol>
         <div className="item">
         <input onChange={(event)=>{this.changeHandler(event); } }value ={this.state.todo}/>
         <button onClick={()=>{this.create()}}>Add to list</button>
