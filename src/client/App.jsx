@@ -3,12 +3,12 @@ import { hot } from 'react-hot-loader';
 class TodoList extends React.Component {
   render() {
     var displayList = this.props.values.map(list=> {
-        return <p>{list}</p>
+        return <li>{list}</li>
     });
     return (
-      <div>
+      <ol>
         {displayList}
-      </div>
+      </ol>
     );
   }
 }
@@ -18,15 +18,15 @@ class App extends React.Component {
     super();
     this.state = {
             todo : "",
-            todoList: []
+            todoList: [],
         }
   }
   create() {
-    let newTodo = "";
-    newTodo = this.state.todoList;
+    let newTodo = this.state.todoList;
     newTodo.push(this.state.todo);
-    this.setState({todo:""});
+    this.setState({todoList:newTodo, todo:""});
   }
+
   changeHandler(event){
     this.setState({todo:event.target.value});
     console.log("change", event.target.value);
@@ -35,12 +35,11 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        Welcome.
         <TodoList values={this.state.todoList} />
         <div className="item">
         <input onChange={(event)=>{this.changeHandler(event); } }value ={this.state.todo}/>
+        <button onClick={()=>{this.create()}}>Add to list</button>
         </div>
-        <button onClick={()=>{this.create()}}>Create</button>
       </div>
     );
   }
