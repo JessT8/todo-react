@@ -1,13 +1,16 @@
 import React, {Fragment} from 'react';
 import { hot } from 'react-hot-loader';
-var moment = require('moment');
 
+import Form from './components/form/form';
+
+import ItemList from './components/itemlist/itemlist';
+
+var moment = require('moment');
 
 class App extends React.Component {
     constructor() {
         super();
         this.state = {
-            todo : "",
             todoList: [],
             errorMsg : "",
     }
@@ -19,22 +22,16 @@ delete(event) {
     this.setState({todoList: todoList});
 }
 
-create() {
-    let newTodo = this.state.todo;
-    if(newTodo.length > 1 && newTodo.length < 200 && newTodo.trim().length == 0){
+setTodoList(newTodo) {
+   if(newTodo.length > 1 && newTodo.length < 200){
         let newTodoList = this.state.todoList;
         let currentDate= moment().format('MM/DD/YYYY HH:mm:ss').toString();
         newTodoList.push({task:newTodo, date:currentDate});
-        this.setState({todoList:newTodoList, todo:"", errorMsg:""});
-    }else {
+        this.setState({todoList:newTodoList, errorMsg:""});
+     }else {
         let errorMsg = "Wrong input! Need to be more than 1 letter and less than 200 letters";
-        this.setState({errorMsg:errorMsg, todo:""});
-    }
-}
-
-changeHandler(event) {
-    this.setState({todo:event.target.value});
-    console.log("change", event.target.value);
+         this.setState({errorMsg:errorMsg});
+     }
 }
 
 render() {
@@ -67,16 +64,18 @@ render() {
           </tbody>
         </table>);
     }
+
+    const addNewTask = todo =>{
+        this.setTodoList(todo);
+    }
     return (
       <div>
         <div>
             {displayError}
             {displayTable}
         </div>
-        <div className="item mt-5">
-            <input className="form-control mb-3" onChange={(event)=>{this.changeHandler(event); } }value ={this.state.todo}/>
-            <button className="btn btn-success" onClick={()=>{this.create()}} >Add to list</button>
-        </div>
+        <Form setTodoList={addNewTask}>
+        </Form>
       </div>
       );
     }
