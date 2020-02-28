@@ -16,12 +16,6 @@ class App extends React.Component {
     }
 }
 
-delete(event) {
-    let todoList = this.state.todoList;
-    todoList.splice(parseInt(event.target.value), 1);
-    this.setState({todoList: todoList});
-}
-
 setTodoList(newTodo) {
    if(newTodo.length > 1 && newTodo.length < 200){
         let newTodoList = this.state.todoList;
@@ -34,6 +28,12 @@ setTodoList(newTodo) {
      }
 }
 
+setDeleteTodoList(index){
+        let todoList = this.state.todoList;
+        todoList.splice(parseInt(index), 1);
+        this.setState({todoList: todoList});
+}
+
 render() {
     let displayError;
     if (this.state.errorMsg != "") {
@@ -41,41 +41,25 @@ render() {
     }else {
         displayError = "";
     }
-    let counter = 0;
-    var displayList = this.state.todoList.map((list,index)=> {
-        counter ++;
-        return <Fragment><tr key={index}><th scope="row">{counter}</th><td> {list.task}</td><td>{list.date}</td><td><button className="btn btn-danger"onClick={(event)=>{this.delete(event)}} value={counter-1}>Remove</button></td></tr></Fragment>
-    })
-
-    let displayTable = "";
-    if (displayList != "") {
-        displayTable = (
-        <table className="table table-borderless">
-          <thead>
-            <tr>
-                <th scope="col">No.</th>
-                <th scope="col">Tasks</th>
-                <th scope="col">Date</th>
-                <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {displayList}
-          </tbody>
-        </table>);
-    }
-
     const addNewTask = todo =>{
         this.setTodoList(todo);
     }
+    const deleteTodoList = taskIndex =>{
+        this.setDeleteTodoList(taskIndex);
+    }
+    //display todolist if it's not empty
+    let displayTasks = ""
+    if(this.state.todoList.length !== 0 ){
+        displayTasks = <ItemList todoList={this.state.todoList} setDeleteTodoList={deleteTodoList}></ItemList>
+    }
+
     return (
       <div>
         <div>
             {displayError}
-            {displayTable}
         </div>
-        <Form setTodoList={addNewTask}>
-        </Form>
+        <Form setTodoList={addNewTask}></Form>
+        {displayTasks}
       </div>
       );
     }
