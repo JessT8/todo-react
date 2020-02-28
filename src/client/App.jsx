@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import { hot } from 'react-hot-loader';
 var moment = require('moment');
 
@@ -21,7 +21,7 @@ delete(event) {
 
 create() {
     let newTodo = this.state.todo;
-    if(newTodo.length > 1 && newTodo.length < 200) {
+    if(newTodo.length > 1 && newTodo.length < 200 && newTodo.trim().length == 0){
         let newTodoList = this.state.todoList;
         let currentDate= moment().format('MM/DD/YYYY HH:mm:ss').toString();
         newTodoList.push({task:newTodo, date:currentDate});
@@ -45,10 +45,11 @@ render() {
         displayError = "";
     }
     let counter = 0;
-    var displayList = this.state.todoList.map(list=> {
+    var displayList = this.state.todoList.map((list,index)=> {
         counter ++;
-        return <tr><th scope="row">{counter}</th><td> {list.task}</td><td>{list.date}</td><td><button className="btn btn-danger"onClick={(event)=>{this.delete(event)}} value={counter-1}>Remove</button></td></tr>
-    });
+        return <Fragment><tr key={index}><th scope="row">{counter}</th><td> {list.task}</td><td>{list.date}</td><td><button className="btn btn-danger"onClick={(event)=>{this.delete(event)}} value={counter-1}>Remove</button></td></tr></Fragment>
+    })
+
     let displayTable = "";
     if (displayList != "") {
         displayTable = (
