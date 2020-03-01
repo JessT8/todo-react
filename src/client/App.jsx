@@ -13,7 +13,7 @@ class App extends React.Component {
         this.state = {
             todoList: [],
             deleteList:[],
-            errorMsg : "",
+            errorMsg : ""
     }
 }
 
@@ -36,25 +36,26 @@ setDeleteTodoList(index){
         deleteList.push(deleted[0]);
         this.setState({todoList: todoList, deleteList: deleteList});
 }
+
 setTodoListUpdate(task){
-   // let tasks = this.props.todoList.filter(data=> data.date == task.date);
-   // tasks.date = moment().format('MM/DD/YYYY HH:mm:ss').toString();
-   // this.setState({todoList: tasks});
+   let tasks = this.props.todoList.filter(data=> data.date == task.date);
+   tasks.date = moment().format('MM/DD/YYYY HH:mm:ss').toString();
+   this.setState({todoList: tasks});
 }
+
 render() {
+
     const addNewTask = todo =>{
         this.setTodoList(todo);
     }
     const deleteTodoList = taskIndex =>{
         this.setDeleteTodoList(taskIndex);
     }
-    const updateTodoList = task=>{
-        this.setTodoListUpdate(task);
-    }
-    //display todolist if it's not empty
+
+    //display todolist or delete list if it's not empty
     let displayTasks = ""
     if(this.state.todoList.length !== 0 || this.state.deleteList.length !==0){
-        displayTasks = <ItemList todoList={this.state.todoList} deleteList={this.state.deleteList} setDeleteTodoList={deleteTodoList} setTodoList={updateTodoList}></ItemList>
+        displayTasks = <ItemList todoList={this.state.todoList} deleteList={this.state.deleteList} setDeleteTodoList={deleteTodoList} ></ItemList>
     }
 
     return (

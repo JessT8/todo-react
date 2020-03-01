@@ -8,18 +8,14 @@ class ItemList extends React.Component {
     setDelete(index) {
         this.props.setDeleteTodoList(parseInt(index));
     }
-    setTodoList(task){
-        this.props.setTodoList(task);
-    }
+
     render() {
         const deleteTask = index=>{
             this.setDelete(index);
         }
-        const setTodo = values =>{
-            this.setTodoList(values);
-        }
+
         var displayList = this.props.todoList.map((list,index)=> {
-              return <React.Fragment key={index.toString()}><TodoItem index={index} list={list} setTodo={setTodo} delete={deleteTask}></TodoItem></React.Fragment>
+              return <React.Fragment key={index.toString()}><TodoItem index={index} list={list} delete={deleteTask}></TodoItem></React.Fragment>
         });
         var displayDelete = this.props.deleteList.map((list,index)=> {
               return <React.Fragment key={index.toString()}><DeleteItemList index={index} list={list}></DeleteItemList></React.Fragment>
