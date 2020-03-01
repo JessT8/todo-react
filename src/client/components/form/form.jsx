@@ -18,15 +18,22 @@ class Form extends React.Component {
     }
 
     render() {
+        let displayError;
+        if (this.props.errorMsg != "") {
+            displayError = (<p className="warning">{this.props.errorMsg}</p>);
+        }else {
+            displayError = "";
+        }
         return (
                 <div className="item mt-5">
                     <input className="form-control mb-3"
                         onChange={(event)=>{this.inputChange(event.target.value)}}
                         value={this.state.todo}/>
-                    <button className="btn btn-success"
+                    <button className="btn btn-success mb-3"
                         onClick={()=>{this.addToDo()}}>
                         Add to list
                     </button>
+                    {displayError}
                 </div>
                 );
              }
